@@ -1,8 +1,0 @@
-{
-  "users": [
-    { 
-      "username": "{{ .Values.auth.user }}",
-      "password": "{{ .Values.auth.password }}"
-    }
-  ]
-}
