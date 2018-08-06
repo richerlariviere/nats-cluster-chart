@@ -98,7 +98,18 @@ readinessProbe:
 ##
 auth:
   enabled: true
-  user: nats_client
-  #password:
-  
+
+tls:
+  enabled: false
+  #serverSecret: 
+  #routesSecret:
+
 clusterSize: 3
+
+## Configuration reload
+##
+## On Kubernetes v1.10+ clusters with feature=--feature-gates=PodShareProcessNamespace=true
+configReload:
+  enable: false
+  reloaderImage: "connecteverything/nats-server-config-reloader"
+  reloaderImageTag: "0.2.2-v1alpha2"
