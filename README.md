@@ -1,6 +1,6 @@
 # NATS-Operator
 
-NATS Operator manages [NATS](https://nats.io/) clusters atop [Kubernetes](http://kubernetes.io), automating their creation and administration.
+NATS is an open-source, cloud-native messaging system. Companies like Apcera, Baidu, Siemens, VMware, HTC, and Ericsson rely on NATS for its highly performant and resilient messaging capabilities.
 
 
 ## TL;DR
@@ -11,7 +11,10 @@ $ helm install .
 
 ## Introduction
 
-This chart bootstraps a [NATS](https://github.com/bitnami/bitnami-docker-nats) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+NATS Operator manages [NATS](https://nats.io/) clusters atop [Kubernetes](http://kubernetes.io), automating their creation and administration. With NATS-operator you can benefits from the flexibility brought by the Kubernetes operator pattern. It means less juggling between manifests and a few handy features like automatic configuration reload.
+
+If you want to manage NATS entirely by yourself and have more control over your NATS cluster, you can always use the original [NATS](https://github.com/helm/charts/tree/master/stable/nats) Helm chart.
+
 
 ## Prerequisites
 
@@ -63,8 +66,8 @@ The following table lists the configurable parameters of the NATS chart and thei
 | `tolerations`                        | Toleration labels for pod assignment                                                         | `nil`                                           |
 | `schedulerName`                      | Name of an alternate scheduler                                                               | `nil`                                           |
 | `antiAffinity`                       | Anti-affinity for pod assignment (values: soft or hard)                                      | `soft`                                          |
-| `podAnnotations`                     | Annotations to be added to pods                                                              | {}                                              |
-| `podLabels`                          | Additional labels to be added to pods                                                        | {}                                              |
+| `podAnnotations`                     | Annotations to be added to pods                                                              | `{}`                                            |
+| `podLabels`                          | Additional labels to be added to pods                                                        | `{}`                                            |
 | `updateStrategy`                     | Replicaset Update strategy                                                                   | `OnDelete`                                      |
 | `rollingUpdatePartition`             | Partition for Rolling Update strategy                                                        | `nil`                                           |
 | `livenessProbe.enabled`              | Enable liveness probe                                                                        | `true`                                          |
@@ -80,6 +83,9 @@ The following table lists the configurable parameters of the NATS chart and thei
 | `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | `6`                                             |
 | `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed. | `1`                                             |
 | `auth.enabled`                       | Switch to enable/disable client authentication                                               | `true`                                          |
+| `auth.username`                      | Client authentication username                                                               | `true`                                          |
+| `auth.password`                      | Client authentication password                                                               | `true`                                          |
+| `auth.users`                         | Allows multi-user authentication of 2 or more user                                           | `[]`                                            |
 | `tls.enabled`                        | Enable TLS                                                                                   | `false`                                         |
 | `tls.serverSecret`                   | Certificates to secure the NATS client connections (type: kubernetes.io/tls)                 | `nil`                                           |
 | `tls.routesSecret`                   | Certificates to secure the routes. (type: kubernetes.io/tls)                                 | `nil`                                           |
@@ -93,29 +99,41 @@ The following table lists the configurable parameters of the NATS chart and thei
 
 Here is an example of how to setup a NATS cluster with client authentication.
 
-
-Edit `config/client-auth.json`
-```json
-{
-  "users": [
-    { 
-      "username": "my-user",
-      "password": "T0pS3cr3t"
-    }
-  ]
-}
-```
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. 
 
 ```bash
-$ helm install --name my-release --set auth.enabled=true .
+$ helm install --name my-release --set auth.enabled=true,auth.username=my-user,auth.password=T0pS3cr3t .
 ```
 
+You can also specify more than 1 user using this way:
+
+```bash
+helm install --name my-release --set auth.enabled=true,auth.users[0]=my-user,auth.users[0].password=T0pS3cr3t,auth.users[1]=my-user-2,auth.users[1].password=MyS3cr3tP4ssw0rd .
+```
+You can consider editing the default values.yaml as it is easier to manage:
+
+```yaml
+...
+auth:
+  enabled: true
+
+  #username: 
+  #password: 
+
+  # values.yaml
+  users:
+    - username: "my-user"
+      password: "T0pS3cr3t"
+    - username: "my-user-2"
+      password: "MyS3cr3tP4ssw0rd"
+...
+```
+
+
+
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
 ```bash
 $ helm install --name my-release -f values.yaml .
 ```
-
-> **Tip**: You can use the default [values.yaml](values.yaml)

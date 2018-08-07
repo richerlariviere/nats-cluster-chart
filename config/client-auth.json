@@ -1,8 +1,19 @@
 {
   "users": [
+    {{- if .Values.auth.username }}
     { 
-      "username": "< PLEASE CHANGE USERNAME HERE >",
-      "password": "< PLEASE CHANGE PASSWORD HERE >"
+      "username": "{{ .Values.auth.username }}",
+      "password": "{{ .Values.auth.password }}"
     }
+    {{- end }}
+   
+    {{- if .Values.auth.users }}
+    {{- range $index, $user := .Values.auth.users }}
+    { 
+      "username": "{{ $user.username }}",
+      "password": "{{ $user.password }}"
+    },
+    {{- end}}
+    {{- end }}
   ]
 }

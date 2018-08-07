@@ -98,6 +98,17 @@ readinessProbe:
 ##
 auth:
   enabled: true
+  
+  ## This is where you enter a username/password for 1 user
+  username: "my-user"
+  password: "T0pS3cr3t"
+
+  ## This is a where you can specify 2 or more users
+  users: {}
+    #- username: "another-user-1"
+    #  password: "another-password-1"
+    #- username: "another-user-2"
+    #  password: "another-password-2"
 
 tls:
   enabled: false
