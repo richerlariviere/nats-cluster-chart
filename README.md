@@ -1,3 +1,6 @@
+*WARNING: This repo is mainly a test repo for an early version of a helm chart for Nats-Operator. The project has been moved to the official Nats-Operator project and is currently tracked in https://github.com/nats-io/nats-operator/pull/62* 
+
+
 # NATS-Operator
 
 NATS is an open-source, cloud-native messaging system. Companies like Apcera, Baidu, Siemens, VMware, HTC, and Ericsson rely on NATS for its highly performant and resilient messaging capabilities.
